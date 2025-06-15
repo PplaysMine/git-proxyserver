@@ -38,13 +38,19 @@ app.get('/auth-token-exchange', async (req, res) => {
                     client_secret: CLIENT_SECRET_GITLAB,
                     code: query.code,
                     grant_type: 'authorization_code',
-                    redirect_uri: 'http://localhost:9000',
+                    redirect_uri: FRONTEND_URL,
                 },
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             });
+        } else {
+            res.sendStatus(400);
+            return;
         }
+    } else {
+        res.sendStatus(400);
+        return;
     }
 
     if(tokenRes) {
@@ -89,14 +95,16 @@ app.delete('/auth-token', async (req, res) => {
             });
             if(result.status == 204) res.sendStatus(200);
             else res.sendStatus(500);
+        } else {
+            res.sendStatus(400);
+            return;
         }
     } else {
-        res.sendStatus(403);
+        res.sendStatus(400);
+        return;
     }
 });
 
 app.listen(7000, () => {
     console.log('Listening...')
 });
-
-// npx webpack serve
