@@ -71,11 +71,23 @@ app.get('/repos', async (req, res) => {
     const query = req.query;
     if(query.token && query.type) {
         if(query.type == 'lab') {
-
+            const result = await axios.get('https://gitlab.ruhr-uni-bochum.de//api/v4/projects?membership=true', {
+                headers: {
+                    Authorization: `Bearer ${query.token}`,
+                }
+            });
+            if(result.status == 200) {
+                res.send(result.data.map(obj => ({
+                        name: obj.name,
+                        url: obj.web_url,
+                        private: obj.visibility === 'private' ? true : false,
+                    }),
+                ));
+            } else res.sendStatus(500);
         } else if(query.type == 'hub') {
             const result = await axios.get('https://api.github.com/user/repos', {
                 headers: {
-                    'Authorization': `Bearer ${query.token}`,
+                    Authorization: `Bearer ${query.token}`,
                 }
             });
             if(result.status == 200) {
