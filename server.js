@@ -67,13 +67,40 @@ app.get('/auth-token-exchange', async (req, res) => {
     }
 });
 
+app.get('/repos', async (req, res) => {
+    const query = req.query;
+    if(query.token && query.type) {
+        if(query.type == 'lab') {
+
+        } else if(query.type == 'hub') {
+            const result = await axios.get('https://api.github.com/user/repos', {
+                headers: {
+                    'Authorization': `Bearer ${query.token}`,
+                }
+            });
+            if(result.status == 200) {
+                res.send(result.data.map(obj => ({
+                        name: obj.name,
+                        url: obj.html_url,
+                        private: obj.private,
+                    }),
+                ));
+            } else res.sendStatus(500);
+        } else {
+            res.sendStatus(400);
+        }
+    } else {
+        res.sendStatus(400);
+    }
+});
+
 app.delete('/auth-token', async (req, res) => {
     user_connections_del++;
     console.log(`${user_connections_del} connections to the auth-token delete endpoint.`);
     const query = req.query;
     if(query.token && query.client_id && query.type) {
         if(query.type == 'lab') {
-            let result = await axios.post('https://gitlab.ruhr-uni-bochum.de/oauth/revoke', null, {
+            const result = await axios.post('https://gitlab.ruhr-uni-bochum.de/oauth/revoke', null, {
                 params: {
                     client_id: query.client_id,
                     client_secret: CLIENT_SECRET_GITLAB,
@@ -84,7 +111,8 @@ app.delete('/auth-token', async (req, res) => {
             else res.sendStatus(500);
         } else if(query.type == 'hub') {
             const basicAuth = Buffer.from(`${query.client_id}:${CLIENT_SECRET_GITHUB}`).toString('base64');
-            let result = await axios.delete(`https://api.github.com/applications/${query.client_id}/token`, {
+            console.log(`https://api.github.com/applications/${query.client_id}/token`)
+            const result = await axios.delete(`https://api.github.com/applications/${query.client_id}/token`, {
                 headers: {
                     'Authorization': `Basic ${basicAuth}`,
                     'Accept': 'application/vnd.github.v3+json',
