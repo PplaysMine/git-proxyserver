@@ -123,7 +123,6 @@ app.delete('/auth-token', async (req, res) => {
             else res.sendStatus(500);
         } else if(query.type == 'hub') {
             const basicAuth = Buffer.from(`${query.client_id}:${CLIENT_SECRET_GITHUB}`).toString('base64');
-            console.log(`https://api.github.com/applications/${query.client_id}/token`)
             const result = await axios.delete(`https://api.github.com/applications/${query.client_id}/token`, {
                 headers: {
                     'Authorization': `Basic ${basicAuth}`,
