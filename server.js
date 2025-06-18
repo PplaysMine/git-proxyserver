@@ -79,7 +79,7 @@ app.get('/repos', async (req, res) => {
             if(result.status == 200) {
                 res.send(result.data.map(obj => ({
                         name: obj.name,
-                        url: obj.web_url,
+                        url: obj.http_url_to_repo,
                         private: obj.visibility === 'private' ? true : false,
                     }),
                 ));
