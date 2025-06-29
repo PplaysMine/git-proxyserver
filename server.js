@@ -4,8 +4,11 @@ const cors = require('cors');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const config = require('./config');
+const url = require('url');
+const { raw } = require('body-parser');
 
 const app = express();
+const proxy = express();
 const CLIENT_SECRET_GITHUB = config.CLIENT_SECRET_GITHUB;
 const CLIENT_SECRET_GITLAB = config.CLIENT_SECRET_GITLAB;
 const FRONTEND_URL = config.FRONTEND_URL;
@@ -18,6 +21,12 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json());
+
+proxy.use(cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+}));
+proxy.use(express.json());
 
 app.get('/auth-token-exchange', async (req, res) => {
     const query = req.query;
@@ -145,6 +154,36 @@ app.delete('/auth-token', async (req, res) => {
     }
 });
 
+proxy.use(raw({ type: '*/*' }));
+proxy.all('/*url', async (req, res) => {
+    let u = url.parse(req.url, true);
+    let path = u.path;
+    let protocol = 'https';
+    let reqUrl = `${protocol}:/${path}`;
+
+    const response = await axios({
+        method: req.method,
+        url: reqUrl,
+        headers: {
+            ...req.headers,
+            host: new URL(reqUrl).host,
+        },
+        data: req.body,
+        timeout: 30 * 1000,
+        responseType: 'arraybuffer',
+        validateStatus: () => true,
+    });
+
+    res.status(response.status);
+    for (const [key, value] of Object.entries(response.headers)) {
+      res.setHeader(key, value);
+    }
+    res.send(response.data);
+});
+
 app.listen(7000, () => {
-    console.log('Listening...')
+    console.log('Server is listening...');
+});
+proxy.listen(7001, () => {
+    console.log('Proxy started...');
 });
