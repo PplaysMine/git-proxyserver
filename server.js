@@ -1,4 +1,4 @@
-// (test test) New hello from TScript!!
+// Hello from TScript!!
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -7,7 +7,7 @@ const config = require('./config');
 
 const app = express();
 const CLIENT_SECRET_GITHUB = config.CLIENT_SECRET_GITHUB;
-const CLIENT_SECRET_GITLAB = config.CLIENT_SECRET_GITLAB
+const CLIENT_SECRET_GITLAB = config.CLIENT_SECRET_GITLAB;
 const FRONTEND_URL = config.FRONTEND_URL;
 
 let user_connections_auth = 0;
