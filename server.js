@@ -1,4 +1,4 @@
-// Hello from TScript!!
+// Hello from TScript!
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
