@@ -156,10 +156,8 @@ app.delete('/auth-token', async (req, res) => {
 
 proxy.use(raw({ type: '*/*' }));
 proxy.all('/*url', async (req, res) => {
-    let u = url.parse(req.url, true);
-    let path = u.path;
-    let protocol = 'https';
-    let reqUrl = `${protocol}:/${path}`;
+    let dest = url.parse(req.url, true);
+    let reqUrl = new URL(`https:/${dest.path}`);
 
     const response = await axios({
         method: req.method,
@@ -167,6 +165,7 @@ proxy.all('/*url', async (req, res) => {
         headers: {
             ...req.headers,
             host: new URL(reqUrl).host,
+            'user-agent': 'git/TScript',
         },
         data: req.body,
         timeout: 30 * 1000,
