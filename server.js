@@ -180,9 +180,9 @@ proxy.all('/*url', async (req, res) => {
     res.send(response.data);
 });
 
-app.listen(7000, () => {
+app.listen(config.SERVER_PORT, () => {
     console.log('Server is listening...');
 });
-proxy.listen(7001, () => {
+proxy.listen(config.PROXY_PORT, () => {
     console.log('Proxy started...');
 });
