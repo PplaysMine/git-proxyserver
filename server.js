@@ -159,6 +159,11 @@ proxy.all('/*url', async (req, res) => {
     let dest = url.parse(req.url, true);
     let reqUrl = new URL(`https:/${dest.path}`);
 
+    if(req.headers.origin !== FRONTEND_URL) {
+        res.sendStatus(401);
+        return;
+    }
+
     const response = await axios({
         method: req.method,
         url: reqUrl,
