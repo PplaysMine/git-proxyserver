@@ -1,5 +1,5 @@
 # Git Proxyserver
-This server handles all git-related requests from the TScript web IDE.
+This server handles all git-related requests from the <a href="https://github.com/TGlas/tscript">TScript web IDE</a>.
 This includes:
 - the initial token authorization flow according to the <a href="https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps">OAuth2 authorization standard</a>.
 - Requesting a list of the user's repositories from the GitLab / GitHub API.
