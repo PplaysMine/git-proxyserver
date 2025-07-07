@@ -186,8 +186,8 @@ proxy.all('/*url', async (req, res) => {
 });
 
 app.listen(config.SERVER_PORT, () => {
-    console.log('Server is listening...');
+    console.log(`Server is listening on port ${config.SERVER_PORT}...`);
 });
 proxy.listen(config.PROXY_PORT, () => {
-    console.log('Proxy started...');
+    console.log(`Proxy started on port ${config.PROXY_PORT}...`);
 });
