@@ -134,6 +134,7 @@ app.delete('/auth-token', async (req, res) => {
             else res.sendStatus(500);
         } else if(query.type == 'hub') {
             const basicAuth = Buffer.from(`${query.client_id}:${CLIENT_SECRET_GITHUB}`).toString('base64');
+            let tokenRevoked = false;
             const result = await axios.delete(`https://api.github.com/applications/${query.client_id}/token`, {
                 headers: {
                     'Authorization': `Basic ${basicAuth}`,
@@ -142,8 +143,12 @@ app.delete('/auth-token', async (req, res) => {
                 data: {
                     access_token: query.token,
                 },
+            }).catch(err => {
+                if(err.response && err.response.status == 404) {
+                    tokenRevoked = true;
+                }
             });
-            if(result.status == 204) res.sendStatus(200);
+            if(result && result.status == 204 || tokenRevoked) res.sendStatus(200);
             else res.sendStatus(500);
         } else {
             res.sendStatus(400);
