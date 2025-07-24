@@ -10,7 +10,8 @@ Additionally, a separate server runs on a different port that works as a CORS pr
 
 # Configuration
 ## Creating a new configuration
-Create a file named `config.js` and copy the contents of the `exampleConfig.js` file to your newly created file.
+Create a file named `config.js` and copy the contents of the `exampleConfig.js` file to your newly created file.<br>
+You can then start the server using `node server.js`
 ## Config values explained
 - `CLIENT_SECRET_GITLAB` is a string that contains the client secret issued by GitLab when creating a new application. This is needed for any tasks that need authorization.
 - `CLIENT_SECRET_GITHUB` is a string that contains the client secret issued by GitHub when creating a new application. This is needed for any tasks that need authorization.
