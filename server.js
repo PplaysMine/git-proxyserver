@@ -174,7 +174,7 @@ proxy.all('/*url', async (req, res) => {
     let dest = url.parse(req.url, true);
     let reqUrl = new URL(`https:/${dest.path}`);
 
-    if(req.headers.origin !== FRONTEND_URL) {
+    if(!CORS_ALLOWED_ORIGINS.includes(req.headers.origin)) {
         res.sendStatus(401);
         return;
     }
