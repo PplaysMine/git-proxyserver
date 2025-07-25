@@ -19,16 +19,24 @@ const CORS_ALLOWED_ORIGINS = config.CORS_ALLOWED_ORIGINS;
 let user_connections_auth = 0;
 let user_connections_del = 0;
 
-app.use(cors({
-    origin: CORS_ALLOWED_ORIGINS,
-    credentials: true,
-}));
+const corsOptionsFunc = (req, cb) => {
+    const origin = req.header('Origin');
+    const corsOptions = {
+        origin: false,
+        credentials: true,
+    };
+
+    if(CORS_ALLOWED_ORIGINS.includes(origin)) {
+        corsOptions.origin = true;
+    }
+
+    cb(null, corsOptions);
+}
+
+app.use(cors(corsOptionsFunc));
 app.use(express.json());
 
-proxy.use(cors({
-    origin: CORS_ALLOWED_ORIGINS,
-    credentials: true,
-}));
+proxy.use(cors(corsOptionsFunc));
 proxy.use(express.json());
 
 app.get('/auth-token-exchange', async (req, res) => {
