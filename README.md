@@ -16,6 +16,7 @@ You can then start the server using `node server.js`
 - `CLIENT_SECRET_GITLAB` is a string that contains the client secret issued by GitLab when creating a new application. This is needed for any tasks that need authorization.
 - `CLIENT_SECRET_GITHUB` is a string that contains the client secret issued by GitHub when creating a new application. This is needed for any tasks that need authorization.
 - `FRONTEND_URL` is the url the TScript IDE is running on. This is needed to tell GitLab / GitHub where to redirect the user to after attempting authorization.
+- `CORS_ALLOWED_ORIGINS` is a list of URLs that the server accepts requests from.
 - `SERVER_PORT` is the port on which the basic server is running.
 - `PROXY_PORT` is the port on which the proxy server is running.
 - `KEY_LOCATION` is the location of the private key (leave empty to use the http server)
