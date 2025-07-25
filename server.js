@@ -14,6 +14,7 @@ const proxy = express();
 const CLIENT_SECRET_GITHUB = config.CLIENT_SECRET_GITHUB;
 const CLIENT_SECRET_GITLAB = config.CLIENT_SECRET_GITLAB;
 const FRONTEND_URL = config.FRONTEND_URL;
+const CORS_ALLOWED_ORIGINS = config.CORS_ALLOWED_ORIGINS;
 
 let user_connections_auth = 0;
 let user_connections_del = 0;
@@ -25,7 +26,7 @@ const corsOptionsFunc = (req, cb) => {
         credentials: true,
     };
     
-    if(config.CORS_ALLOWED_ORIGINS.includes(origin)) {
+    if(CORS_ALLOWED_ORIGINS.includes(origin)) {
         corsOptions.origin = true;
     }
 
