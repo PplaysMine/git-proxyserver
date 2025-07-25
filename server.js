@@ -50,6 +50,7 @@ app.get('/auth-token-exchange', async (req, res) => {
                 client_id: query.client_id,
                 client_secret: CLIENT_SECRET_GITHUB,
                 code: query.code,
+                redirect_uri: FRONTEND_URL,
             },
             { headers: { Accept: 'application/json' } });
         } else if(query.type == 'lab') {
