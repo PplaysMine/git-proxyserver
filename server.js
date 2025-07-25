@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const config = require('./config');
 const url = require('url');
 const { raw } = require('body-parser');
+const https = require('https');
+const fs = require('fs');
 
 const app = express();
 const proxy = express();
@@ -190,9 +192,23 @@ proxy.all('/*url', async (req, res) => {
     res.send(response.data);
 });
 
-app.listen(config.SERVER_PORT, () => {
-    console.log(`Server is listening on port ${config.SERVER_PORT}...`);
-});
-proxy.listen(config.PROXY_PORT, () => {
-    console.log(`Proxy started on port ${config.PROXY_PORT}...`);
-});
+
+if(config.KEY_LOCATION && config.CERT_LOCATION) {
+    const options = {
+        key: fs.readFileSync(config.KEY_LOCATION),
+        cert: fs.readFileSync(config.CERT_LOCATION),
+    };
+    https.createServer(options, app).listen(config.SERVER_PORT, () => {
+        console.log(`HTTPS Server is listening on port ${config.SERVER_PORT}...`);
+    });
+    https.createServer(options, proxy).listen(config.PROXY_PORT, () => {
+        console.log(`HTTPS Proxy started on port ${config.PROXY_PORT}...`);
+    });
+} else {
+    app.listen(config.SERVER_PORT, () => {
+        console.log(`Server is listening on port ${config.SERVER_PORT}...`);
+    });
+    proxy.listen(config.PROXY_PORT, () => {
+        console.log(`Proxy started on port ${config.PROXY_PORT}...`);
+    });
+}

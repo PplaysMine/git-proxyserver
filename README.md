@@ -18,3 +18,5 @@ You can then start the server using `node server.js`
 - `FRONTEND_URL` is the url the TScript IDE is running on. This is needed to tell GitLab / GitHub where to redirect the user to after attempting authorization.
 - `SERVER_PORT` is the port on which the basic server is running.
 - `PROXY_PORT` is the port on which the proxy server is running.
+- `KEY_LOCATION` is the location of the private key (leave empty to use the http server)
+- `CERT_LOCATION` is the location of the SSL certificate (leave empty to use the http server)
